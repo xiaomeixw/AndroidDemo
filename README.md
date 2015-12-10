@@ -1,6 +1,10 @@
 # AndroidDemo
 Write some Android demo code to Explore Android new technology and famous libraries...
 
+- _Explore JobScheduler on Android L_
+- _Explore JobScheduler Support Library : Trigger_
+
+
 ## 一. Explore JobScheduler on Android L ##
 ### Screen
 
@@ -76,7 +80,9 @@ notice:
 
 
 > permission : ACCESS_NETWORK_STATE & WAKE_LOCK & RECEIVE_BOOT_COMPLETED
+> 
 > service : android:name="com.github.airk.trigger.TriggerLoop"
+> 
 > receiver : com.github.airk.trigger.PersistReceiver
 
 1.Get Trigger Instance
