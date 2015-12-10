@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="sabria.trigger" >
+
+    <!-- inner status controller: network controller will need it -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- wakelock helps Trigger work well, if you really don't like it, remove it, doesn't matter -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- that's the point why Trigger can recover persist-able job after device rebooting, if you don't need it, never mind -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".TriggerActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="com.github.airk.trigger.TriggerLoop" />
+        <!-- as what I said in permission, if you don't need it, remove it -->
+        <receiver android:name="com.github.airk.trigger.PersistReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+
+
+</manifest>
