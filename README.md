@@ -1,7 +1,7 @@
 # AndroidDemo
-Write some android demo code to Explore android new technology and famous libraries...
+Write some Android demo code to Explore Android new technology and famous libraries...
 
-## Explore JobScheduler on Android L ##
+## 一. Explore JobScheduler on Android L ##
 ### Screen
 
 <img src="http://i.imgur.com/XrcdLw4.png" width="45%">
@@ -55,5 +55,58 @@ notice:
 [Using the JobScheduler API on Android Lollipop](https://github.com/tutsplus/Android-JobSchedulerAPI)
 
 [Implementing GCM Network Manager on Android](https://developers.google.com/cloud-messaging/network-manager)
+
+
+
+## 二. Explore JobScheduler Support Library : Trigger ##
+
+[https://github.com/airk000/Trigger](https://github.com/airk000/Trigger "https://github.com/airk000/Trigger")
+
+### Screen
+
+<img src="http://i.imgur.com/JiWAMAs.png" width="45%">
+
+### How to Use
+
+notice: 
+
+- _1.supprot API14._
+- _2.should state there permission in Manifest._
+
+
+
+> permission : ACCESS_NETWORK_STATE & WAKE_LOCK & RECEIVE_BOOT_COMPLETED
+> service : android:name="com.github.airk.trigger.TriggerLoop"
+> receiver : com.github.airk.trigger.PersistReceiver
+
+1.Get Trigger Instance
+
+	 Trigger trigger = Trigger.getInstance(TriggerActivity.this);
+
+2.New A Job
+
+	Job job1 = new Job(new Action() {
+            @Override
+            protected void act() {
+                Toast.makeText(TriggerActivity.this, "btJob1", Toast.LENGTH_SHORT).show();
+            }
+        }).attachOn(ThreadSpace.BACKGROUND)
+                .repeat()
+                .withExtra(new Condition() {
+                    @Override
+                    public String[] getAction() {
+                        return new String[]{CUSTOM_COND1};
+                    }
+                });
+
+3.Schedule Job
+
+	trigger.schedule(job1, job2, job3, persistAfterRebootJob);
+
+
+### Want to Know more
+
+[https://github.com/airk000](https://github.com/airk000)
+
 
 
