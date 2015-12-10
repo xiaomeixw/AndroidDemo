@@ -1,8 +1,8 @@
 # AndroidDemo
 Write some Android demo code to Explore Android new technology and famous libraries...
 
-- _Explore JobScheduler on Android L_
-- _Explore JobScheduler Support Library : Trigger_
+- _Explore JobScheduler on Android L_(#Explore JobScheduler on Android L)
+- _Explore JobScheduler Support Library : Trigger_(#Explore JobScheduler Support Library : Trigger)
 
 
 ## 一. Explore JobScheduler on Android L ##
