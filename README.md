@@ -5,6 +5,7 @@ Quick Look:
 
 * [Explore JobScheduler on Android L](#一-explore-jobscheduler-on-android-l)
 * [Explore JobScheduler Support Library : Trigger](#二-explore-jobscheduler-support-library--trigger)
+* [Explore JobScheduler Support Library : JobSchedulerCompat](#三-explore-jobscheduler-support-library--jobschedulercompat)
 
 
 ## 一. Explore JobScheduler on Android L
@@ -117,4 +118,85 @@ notice:
 [https://github.com/airk000](https://github.com/airk000)
 
 
+## 三. Explore JobScheduler Support Library : JobSchedulerCompat ##
 
+[https://github.com/evant/JobSchedulerCompat](https://github.com/evant/JobSchedulerCompat)
+
+### Screen
+
+<img src="http://i.imgur.com/468zXES.png" width="35%">
+
+### How to Use
+
+notice: 
+
+- _1.supprot API10+._
+- _2.should state there permission in Manifest._
+
+
+
+> permission : ACCESS_NETWORK_STATE & WAKE_LOCK & RECEIVE_BOOT_COMPLETED
+> 
+> service : android:name=".service.TestJobService"
+> 
+
+1.Get JobScheduler Instance
+
+	 JobScheduler jobScheduler=JobScheduler.getInstance(LowAPIJobSchedulerMainActivity.this);
+
+2.Set JobInfo Builder
+
+	JobInfo job = new JobInfo.Builder(1,
+                        new ComponentName(getPackageName(), LowAPIJobSchedulerService.class.getName()))
+                        .setMinimumLatency(1000)
+                        .setOverrideDeadline(2000)
+                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                        .setRequiresCharging(true)
+                        .setExtras(extras).build();
+
+    jobScheduler.schedule(job);
+
+3.extends JobService,achieve onStartJob() & onStopJob()
+
+	public class LowAPIJobSchedulerService extends JobService {
+
+	    private Handler mJobHanlder = new Handler(new Handler.Callback() {
+	        @Override
+	        public boolean handleMessage(Message msg) {
+	            Toast.makeText(getApplicationContext(), "JobService task running", Toast.LENGTH_SHORT).show();
+	            jobFinished((JobParameters) msg.obj, false);
+	            return true;
+	        }
+	    });
+	
+	    /**
+	     * Start your job in a seperate thread
+	     * @param params
+	     * @return
+	     */
+	    @Override
+	    public boolean onStartJob(JobParameters params) {
+	        mJobHanlder.sendMessage(Message.obtain(mJobHanlder, 1, params));
+	        return false;
+	    }
+	
+	    /**
+	     * Stop the running job, returing true if it needs to be recheduled.
+	     * @param params
+	     * @return
+	     */
+	    @Override
+	    public boolean onStopJob(JobParameters params) {
+	        mJobHanlder.removeMessages(1);
+	        return true;
+	    }
+	}
+
+4.Cancel Job
+
+	jobScheduler.cancelAll();
+
+
+### Want to Know more
+
+[https://github.com/evant/JobSchedulerCompat/issues/34](https://github.com/evant/JobSchedulerCompat/issues/34)
