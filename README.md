@@ -4,7 +4,7 @@ Write some Android demo code to Explore Android new technology and famous librar
 * [Explore JobScheduler on Android L](#Explore)
 * [Explore JobScheduler Support Library : Trigger](#Explore JobScheduler Support Library : Trigger)
 
-## Explore ##
+## Explore
 ### Screen
 
 <img src="http://i.imgur.com/XrcdLw4.png" width="35%">
