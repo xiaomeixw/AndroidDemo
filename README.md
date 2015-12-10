@@ -1,12 +1,22 @@
 # AndroidDemo
-Write some Android demo code to Explore Android new technology and famous libraries...
+Write some Android demo code to Explore Android New technology , Black technology and Famous libraries...
 
-Quick Look:
+
+
+## Quick Look:
 
 * [Explore JobScheduler on Android L](#一-explore-jobscheduler-on-android-l)
 * [Explore JobScheduler Support Library : Trigger](#二-explore-jobscheduler-support-library--trigger)
 * [Explore JobScheduler Support Library : JobSchedulerCompat](#三-explore-jobscheduler-support-library--jobschedulercompat)
 
+
+## APK Resourse
+
+[APK : Explore JobScheduler on Android L](https://github.com/xiaomeixw/AndroidDemo/blob/master/apk/jobscheduler-debug.apk)
+
+[APK : Explore JobScheduler Support Library : Trigger](https://github.com/xiaomeixw/AndroidDemo/blob/master/apk/trigger-debug.apk)
+
+[APK : Explore JobScheduler Support Library : JobSchedulerCompat](https://github.com/xiaomeixw/AndroidDemo/blob/master/apk/jobschedulercompat-debug.apk)
 
 ## 一. Explore JobScheduler on Android L
 ### Screen
