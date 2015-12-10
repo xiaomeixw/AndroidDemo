@@ -1,14 +1,13 @@
 # AndroidDemo
 Write some Android demo code to Explore Android new technology and famous libraries...
 
-- _Explore JobScheduler on Android L_(#Explore JobScheduler on Android L)
-- _Explore JobScheduler Support Library : Trigger_(#Explore JobScheduler Support Library : Trigger)
-
+* [Explore JobScheduler on Android L](#Explore JobScheduler on Android L)
+* [Explore JobScheduler Support Library : Trigger](#Explore JobScheduler Support Library : Trigger)
 
 ## 一. Explore JobScheduler on Android L ##
 ### Screen
 
-<img src="http://i.imgur.com/XrcdLw4.png" width="45%">
+<img src="http://i.imgur.com/XrcdLw4.png" width="35%">
 
 ### How to Use
 
@@ -68,7 +67,7 @@ notice:
 
 ### Screen
 
-<img src="http://i.imgur.com/JiWAMAs.png" width="45%">
+<img src="http://i.imgur.com/JiWAMAs.png" width="35%">
 
 ### How to Use
 
