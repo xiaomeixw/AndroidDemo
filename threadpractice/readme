@@ -1,0 +1,293 @@
+1.创建线程三方案:
+
+通过扩展Thread类来创建多线程:
+    new Thread(Runnable).start();
+
+通过实现Runnable接口来创建多线程:
+
+    new Thread(new Runnable()).start();
+
+通过实现callback<T>接口
+
+    class Task implements Callable<T>
+    executor.submit(Task);
+
+2.关键字volatile:它访问的是原数据而不是拷贝的变量数据.
+
+ 线程为了提高效率，将某成员变量(如A)拷贝了一份（如B），线程中对A的访问其实访问的是B。
+ 只在某些动作时才进行A和B的同步。因此存在A和B不一致的情况。volatile就是用来避免这种情况的。
+ volatile告诉jvm， 它所修饰的变量不保留拷贝，直接访问主内存中的（也就是上面说的A)
+
+
+ 3.join
+
+ thread.Join把指定的线程加入到当前线程，可以将两个交替执行的线程合并为顺序执行的线程。比如在线程B中调用了线程A的Join()方法，直到线程A执行完毕后，才会继续执行线程B。
+ t.join();      //使调用线程 t 在此之前执行完毕。
+ t.join(1000);  //等待 t 线程，等待时间是1000毫秒
+
+Thread的非静态方法join()让一个线程B“加入”到另外一个线程A的尾部。在A执行完毕之前，B不能工作。例如：
+        Thread t = new MyThread();
+        t.start();
+        t.join();
+
+
+4.LockObject 加锁机制
+
+
+> 4.1 锁机制目的:
+
+保证了同步代码在同一时刻只有一个线程在执行。
+类比于:厕所,在同一时刻只有一个人在使用，多人想进入,里面有一个人在用,其他人必需排队.那个在使用的人,通过厕所门的锁来保证只有自己在使用.
+
+4.2 锁机制方案
+
+- _1. 在需要同步的方法的方法签名中加入synchronized关键字。_
+
+	 	public synchronized void synMethod() {
+	        //方法体
+	    }
+
+- _2. 使用synchronized块对需要进行同步的代码段进行同步。_
+
+		public int synMethod(){
+	        synchronized(syncObject) {
+	          //一次只能有一个线程进入
+	        }
+	    }
+
+- _3. 使用JDK 5中提供的java.util.concurrent.lock包中的Lock对象。_
+
+	    private Lock lock = new ReentrantLock();
+	    private Condition notFull = lock.newCondition();
+
+
+5.ThreadPool:
+
+    ExecutorService executor = Executors.newFixedThreadPool(5);
+    pool.execute(workRunnable);
+
+固定大小的线程池:
+ExecutorService executor = Executors.newFixedThreadPool(5);
+   我们创建了包含5个工作线程的固定大小线程池。然后，我们向线程池提交10个任务。
+   由于线程池的大小是5，因此首先会启动5个工作线程，其他任务将进行等待。一旦有任务结束，工作线程会从等待队列中挑选下一个任务并开始执行。
+
+单任务线程池
+ExecutorService pool = Executors.newSingleThreadExecutor();
+    我们创建了包含1个工作线程的固定大小线程池.由于线程池的大小是1，因此首先会启动1个工作线程，其他任务将进行等待。一旦有任务结束，工作线程会从等待队列中挑选下一个任务并开始执行。
+
+可变尺寸的线程池:
+ExecutorService pool = Executors.newCachedThreadPool();
+    execute多少个runnable就运行多少个任务
+
+延迟连接池:
+ScheduledExecutorService pool = Executors.newScheduledThreadPool(2);
+pool.schedule(runnable, 10, TimeUnit.MILLISECONDS);
+    延迟多久后执行任务
+
+自定义线程池:
+ThreadPoolExecutor
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue<Runnable> workQueue)
+
+    用给定的初始参数和默认的线程工厂及处理程序创建新的 ThreadPoolExecutor。使用 Executors 工厂方法之一比使用此通用构造方法方便得多。
+    参数：
+    corePoolSize - 池中所保存的线程数，包括空闲线程。
+    maximumPoolSize - 池中允许的最大线程数。
+    keepAliveTime - 当线程数大于核心时，此为终止前多余的空闲线程等待新任务的最长时间。
+    unit - keepAliveTime 参数的时间单位。
+    workQueue - 执行前用于保持任务的队列。此队列仅保持由 execute 方法提交的 Runnable 任务。
+    抛出：
+    IllegalArgumentException - 如果 corePoolSize 或 keepAliveTime 小于零，或者 maximumPoolSize 小于或等于零，或者 corePoolSize 大于 maximumPoolSize。
+    NullPointerException - 如果 workQueue 为 null
+
+AsyncTask的线程池:
+
+    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
+    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+    private static final int KEEP_ALIVE = 1;
+    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+        private final AtomicInteger mCount = new AtomicInteger(1);
+
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
+        }
+    };
+    private static final BlockingQueue<Runnable> sPoolWorkQueue =
+            new LinkedBlockingQueue<>(128);
+
+
+6.pool.execute(workRunnable); 和 pool.submit(callback/workRunnable)区别
+a.接收的参数不一样
+b.submit有返回值，而execute没有
+c.submit方便Exception处理
+
+Future<?> future = THREAD_POOL_EXECUTOR.submit(workRunnable);
+future.get()获取任务执行结果
+
+7.Callable、Future和FutureTask
+创建线程的2种方式，一种是直接继承Thread，另外一种就是实现Runnable接口.
+这2种方式都有一个缺陷就是：在执行完任务之后无法获取执行结果.
+
+a.callbakc
+//call()函数返回的类型就是传递进来的V类型
+public interface Callable<V> {
+    V call() throws Exception;
+}
+
+怎么使用Callable呢？一般情况下是配合ExecutorService来使用的，在ExecutorService接口中声明了若干个submit方法的重载版本.
+<T> Future<T> submit(Callable<T> task);
+
+b.future
+Future就是对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果。必要时可以通过get方法获取执行结果，该方法会阻塞直到任务返回结果。
+1）判断任务是否完成；
+2）能够中断任务；
+3）能够获取任务执行结果。
+
+因为Future只是一个接口，所以是无法直接用来创建对象使用的，因此就有了下面的FutureTask。FutureTask是Future接口的一个唯一实现类
+
+c.futureTask
+FutureTask类实现了RunnableFuture接口
+    public class FutureTask<V> implements RunnableFuture<V>
+
+RunnableFuture继承了Runnable接口和Future接口，而FutureTask实现了RunnableFuture接口。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。
+    public interface RunnableFuture<V> extends Runnable, Future<V> {
+        void run();
+    }
+
+FutureTask提供了2个构造器：
+    public FutureTask(Callable<V> callable) {
+    }
+    public FutureTask(Runnable runnable, V result) {
+    }
+
+d.使用
+
+Callable+Future获取执行结果：
+
+    ExecutorService executor = Executors.newCachedThreadPool();
+    Future<Integer> result = executor.submit(task);
+    System.out.println("task运行结果"+result.get());
+
+使用Callable+FutureTask获取执行结果：
+
+    ExecutorService executor = Executors.newCachedThreadPool();
+    FutureTask<Integer> futureTask = new FutureTask<Integer>(task);
+    executor.submit(futureTask);
+    System.out.println("task运行结果"+futureTask.get());
+
+或者：
+
+     FutureTask<Integer> futureTask = new FutureTask<Integer>(task);
+     Thread thread = new Thread(futureTask);
+     thread.start();
+
+注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
+
+System.out.println("task运行结果"+futureTask.get());
+
+其中的task代码：
+
+    class Task implements Callable<Integer>{
+        @Override
+        public Integer call() throws Exception {
+            System.out.println("子线程在进行计算");
+            Thread.sleep(3000);
+            int sum = 0;
+            for(int i=0;i<100;i++)
+                sum += i;
+            return sum;
+        }
+    }
+
+8.阻塞队列Queue
+多数生产消费模型的首选数据结构就是队列(先进先出)。Java提供的线程安全的Queue可以分为阻塞队列和非阻塞队列，
+其中阻塞队列的典型例子是BlockingQueue，非阻塞队列的典型例子是ConcurrentLinkedQueue，
+在实际应用中要根据实际需要选用阻塞队列BlockingQueue或者非阻塞队列ConcurrentLinkedQueue。
+
+BlockingQueue 一个接口，Java5提供了不同的现实，如ArrayBlockingQueue和LinkedBlockingQueue，两者都是先进先出（FIFO）顺序。
+而ArrayLinkedQueue是自然有界的，LinkedBlockingQueue可选的边界。
+
+LinkedBlockingQueue
+由于LinkedBlockingQueue实现是线程安全的，实现了先进先出等特性，是作为生产者消费者的首选，
+LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，
+其中主要用到put和take方法，put方法在队列满的时候会阻塞直到有队列成员被消费，take方法在队列空的时候会阻塞，直到有队列成员被放进来。
+
+ConcurrentLinkedQueue
+ConcurrentLinkedQueue是Queue的一个安全实现．Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性。
+LinkedBlockingQueue是一个线程安全的阻塞队列，它实现了BlockingQueue接口，
+BlockingQueue接口继承自java.util.Queue接口，并在这个接口的基础上增加了take和put方法，这两个方法正是队列操作的阻塞版本。
+
+ArrayBlockingQueue是一个由数组支持的有界阻塞队列。此队列按 FIFO（先进先出）原则对元素进行排序。队列的头部 是在队列中存在时间最长的元素.
+队列的尾部 是在队列中存在时间最短的元素。新元素插入到队列的尾部，队列获取操作则是从队列头部开始获得元素。
+
+Queue
+------------
+1.ArrayDeque, （数组双端队列）
+2.PriorityQueue, （优先级队列）
+3.ConcurrentLinkedQueue, （基于链表的并发队列）
+4.DelayQueue, （延期阻塞队列）（阻塞队列实现了BlockingQueue接口）
+5.ArrayBlockingQueue, （基于数组的并发阻塞队列）
+6.LinkedBlockingQueue, （基于链表的FIFO阻塞队列）
+7.LinkedBlockingDeque, （基于链表的FIFO双端阻塞队列）
+8.PriorityBlockingQueue, （带优先级的无界阻塞队列）
+9.SynchronousQueue （并发同步阻塞队列）
+
+首先:Queue是什么就不需要多说了吧，一句话：队列是先进先出。相对的，栈是后进先出
+
+
+
+
+
+9.消费者生产者模式
+一个线程生产,另一个线程消费.
+a.经典的方法是使用wait和notify方法在生产者和消费者线程中合作
+b.使用阻塞队列。支持阻塞的方法put()和take()
+
+
+
+
+
+线程安全就是说多线程访问同一代码，不会产生不确定的结果。
+
+并行和并发区别
+1、并行是指两者同时执行一件事，比如赛跑，两个人都在不停的往前跑；
+2、并发是指资源有限的情况下，两者交替轮流使用资源，比如一段路(单核CPU资源)同时只能过一个人，A走一段后，让给B，B用完继续给A ，交替使用，目的是提高效率
+
+
+
+10.wait & notify & notifyAll() & Condition
+
+http://www.cnblogs.com/dolphin0520/p/3920385.html
+
+wait()、notify()、notifyAll()是三个定义在Object类里的方法，可以用来控制线程的状态。
+
+这三个方法最终调用的都是jvm级的native方法。随着jvm运行平台的不同可能有些许差异。
+    如果对象调用了wait方法就会使持有该对象的线程把该对象的控制权交出去，然后处于等待状态。
+    如果对象调用了notify方法就会通知某个正在等待这个对象的控制权的线程可以继续运行。
+    如果对象调用了notifyAll方法就会通知所有等待这个对象控制权的线程继续运行。
+
+Condition:
+
+java 1.5中才出现的，它用来替代传统的Object的wait()、notify()实现线程间的协作，相比使用Object的wait()、notify()，
+使用Condition1的await()、signal()这种方式实现线程间协作更加安全和高效。
+因此通常来说比较推荐使用Condition，在阻塞队列那一篇博文中就讲述到了，阻塞队列实际上是使用了Condition来模拟线程间协作。
+
+Conditon中的await()对应Object的wait()；
+
+Condition中的signal()对应Object的notify()；
+
+Condition中的signalAll()对应Object的notifyAll()。
+
+
+
+
+
+
+
+
+
+
