@@ -6,6 +6,17 @@
 
     tools:context=".MainActivity">
 
+    <ProgressBar
+
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:background="#FF0000"
+        android:layout_gravity="center_horizontal" />
+
     <Button
         android:id="@+id/btFun1"
         android:layout_width="wrap_content"
@@ -16,31 +27,37 @@
         android:id="@+id/btFun2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btFun1" />
+        android:text="btFun2" />
 
     <Button
         android:id="@+id/btFun3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btFun1" />
+        android:text="btFun3" />
 
     <Button
         android:id="@+id/btFun4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btFun1" />
+        android:text="btFun4" />
 
     <Button
         android:id="@+id/btFun5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btFun1" />
+        android:text="btFun5" />
 
     <Button
         android:id="@+id/btFun6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btFun1" />
+        android:text="btFun6" />
+
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

@@ -1,0 +1,65 @@
+RxJava Rule:
+
+1.RxJava由三个部分组成:
+   创建被观察者
+   创建观察者
+   注册观察者
+
+2.onCompleted和onError两者只会调用一个
+如果队列成功,调用onCompleted
+如果队列发送异常,调用onError
+
+3.创建被观察者三方案:
+    Observable.create(Observable.OnSubscribe);
+    Observable.just(T ...);
+    Observable.from(T[] / Iterable<? extends T>);
+
+4.创建观察者两方案:
+
+基础方案:
+
+    new Observer<T>(callback);
+    new Subscriber<T>(callback);
+
+    共同回调:
+    onNext() 相当于 onClick() / onEvent();
+    onCompleted() 事件队列完结;
+    onError() 事件队列异常;
+
+    Observer 和 Subscriber 是完全一样,区别在于Subscriber拓展了回调,onStart()\doOnSubscribe.
+
+Action方案:
+
+    void  new Action0(){call()}  --对应--  onCompleted()
+    void  new Action1<param>(){}    --对应--  onNext(obj) 和 onError(error)
+
+
+5.注册观察者多方案
+
+基础方案:observable.subscribe(Observer/Subscriber)
+
+
+6.代码格式变化:链式调用
+
+    Observable.from(names).subscribe(new Action1<String>(){});
+
+7.线程指定Scheduler(调度器)
+
+Scheduler.io() io线程
+Scheduler.newThread 新线程
+Scheduler.immediate 当前线程
+AndroidSchedulers.mainThread() androidUI线程
+
+    Observable.just(1,2,3,4)
+        .subscribeOn(Schedulers.io())   //subscribe发生在IO线程
+                .observeOn(AndroidSchedulers.mainThread())  //指定回调发生在主线程
+
+注意:  Scheduler.io() 其实还是在主线程
+
+8.map转化
+
+    所谓变换，就是将事件序列中的对象或整个序列进行加工处理，转换成不同的事件或事件序列。
+
+
+
+
