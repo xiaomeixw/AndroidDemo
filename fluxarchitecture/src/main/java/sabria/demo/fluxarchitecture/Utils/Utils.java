@@ -9,6 +9,8 @@ package sabria.demo.fluxarchitecture.Utils;
  * Open source
  */
 public class Utils {
+
+
     public static boolean isEmpty(String type) {
         return type == null || type.isEmpty();
     }
