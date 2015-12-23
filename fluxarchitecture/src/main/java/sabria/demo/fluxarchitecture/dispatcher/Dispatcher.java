@@ -1,6 +1,11 @@
 package sabria.demo.fluxarchitecture.dispatcher;
 
-import de.greenrobot.event.EventBus;
+import android.util.Log;
+
+import com.squareup.otto.Bus;
+
+import sabria.demo.fluxarchitecture.actions.Action;
+import sabria.demo.fluxarchitecture.stores.Store;
 import sabria.demo.fluxarchitecture.Utils.Utils;
 
 /**
@@ -21,14 +26,14 @@ public class Dispatcher {
 
     private static Dispatcher dispatcher;
 
-    EventBus bus;
+    Bus bus;
 
-    Dispatcher(EventBus bus){
+    Dispatcher(Bus bus){
         this.bus=bus;
     }
 
     //single-instance
-    public static Dispatcher getInstance(EventBus bus){
+    public static Dispatcher getInstance(Bus bus){
         if(dispatcher == null){
             dispatcher = new Dispatcher(bus);
         }
@@ -46,8 +51,12 @@ public class Dispatcher {
         bus.unregister(object);
     }
 
+    public void emitChange(Store.StoreChangeEvent inter){
+        post(inter);
+    }
 
-    public void dispathch(String type,Object... data){
+
+    public void dispatch(String type,Object... data){
         if (Utils.isEmpty(type)) {
             throw new IllegalArgumentException("Type must not be empty");
         }
@@ -57,12 +66,26 @@ public class Dispatcher {
             throw new IllegalArgumentException("Data must be a valid list of key,value pairs");
         }
 
+        Action.Builder builder = Action.type(type);
+        
+        int i =0;
+        while (i<data.length){
+            String key = (String) data[i++];
+            Object value = data[i++];
+            builder.bundle(key,value);
+        }
 
+        //post
 
+        Log.i("---", "dispatch");
 
-
+        post(builder.build());
     }
 
+
+    private void post(final Object event){
+        bus.post(event);
+    }
 
 
 
