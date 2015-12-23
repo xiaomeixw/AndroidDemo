@@ -1,5 +1,5 @@
 
-    ![](http://i.imgur.com/Rx8wdOv.png)
+![](http://i.imgur.com/Rx8wdOv.png)
 
 
 View: 应用的界面。这里创建响应用户操作的action。
