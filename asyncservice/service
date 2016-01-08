@@ -1,0 +1,247 @@
+package com.blog.backasync;
+
+import com.joanzapata.android.asyncservice.api.ErrorMapper;
+import com.joanzapata.android.asyncservice.api.Message;
+import com.joanzapata.android.asyncservice.api.internal.AsyncService;
+import com.joanzapata.android.asyncservice.api.internal.BackgroundExecutor;
+import java.io.Serializable;
+import java.util.List;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import com.blog.backasync.DemoService;
+import com.joanzapata.android.asyncservice.api.internal.AsyncServiceCache;
+
+public final class DemoServiceImpl extends DemoService {
+
+  private final Object emitter;
+
+  private final Handler __handler = new Handler(Looper.getMainLooper());
+
+  private final ErrorMapper __errorMapper = new com.joanzapata.android.asyncservice.api.ErrorMapper.DefaultErrorMapper();
+
+  public DemoServiceImpl(Object emitter) {
+    this.emitter = emitter;
+    applicationContext = AsyncService.context;
+  }
+
+  public UserEvent getUser(final Long id) {
+    final String callId = "DemoService.getUser(" + id+ ")";
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.UserEvent __payload = DemoServiceImpl.super.getUser(id);
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+
+  public User getUser(final String name) {
+    final String callId = "DemoService.getUser(" + name+ ")";
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.User __payload = DemoServiceImpl.super.getUser(name);
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+
+  public User getUser2(final String name) {
+    final String callId = "DemoService.getUser2(" + name+ ")";
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.User __payload = DemoServiceImpl.super.getUser2(name);
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+
+  public LoadingEvent getLoading() {
+    final String callId = "DemoService.getLoading()";
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.LoadingEvent __payload = DemoServiceImpl.super.getLoading();
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+
+  public UserEvent getUserAsyncWithCache(final Long id) {
+    final String callId = "DemoService.getUserAsyncWithCache(" + id+ ")";
+    final String cacheKey = "DemoService.getUserAsyncWithCache(" + id+ ")";
+    BackgroundExecutor.execute(new Runnable() {
+          @Override
+          public void run() {
+            com.blog.backasync.UserEvent cache = AsyncServiceCache.get(cacheKey, com.blog.backasync.UserEvent.class);
+            if (cache == null) return;
+            Message message = new Message(cache);
+            message.cached().setEmitter(emitter);
+            AsyncService.dispatch(message);
+          }
+        }
+        , callId, "__SERIAL_CHECK_CACHE");
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.UserEvent __payload = DemoServiceImpl.super.getUserAsyncWithCache(id);
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncServiceCache.store(cacheKey, __payload);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+
+  protected void displayMessage(final String message) {
+    final String callId = "DemoService.displayMessage(" + message+ ")";
+    __handler.post(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              DemoServiceImpl.super.displayMessage(message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        );
+  }
+
+  public HuiEvent getHuiData() {
+    final String callId = "DemoService.getHuiData()";
+    final String cacheKey = "DemoService.getHuiData()";
+    BackgroundExecutor.execute(new Runnable() {
+          @Override
+          public void run() {
+            com.blog.backasync.HuiEvent cache = AsyncServiceCache.get(cacheKey, com.blog.backasync.HuiEvent.class);
+            if (cache == null) return;
+            Message message = new Message(cache);
+            message.cached().setEmitter(emitter);
+            AsyncService.dispatch(message);
+          }
+        }
+        , callId, "__SERIAL_CHECK_CACHE");
+    BackgroundExecutor.execute(
+        new Runnable() {
+          @Override
+          public void run() {
+            try {
+              com.blog.backasync.HuiEvent __payload = DemoServiceImpl.super.getHuiData();
+              if (__payload == null) {
+                return;
+              }
+              Message __message = new Message(__payload);
+              __message.setQuery(callId);
+              __message.setEmitter(emitter);
+              AsyncServiceCache.store(cacheKey, __payload);
+              AsyncService.dispatch(__message);
+            }
+            catch (Throwable __e) {
+              final int code = __errorMapper.mapError(__e);
+              if (code == -1) {
+                // Ignore
+              }
+              Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), __e);
+            }
+          }
+        }
+        , callId, "__SERIAL_DEFAULT");
+    return null;
+  }
+}

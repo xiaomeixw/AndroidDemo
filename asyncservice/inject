@@ -1,0 +1,142 @@
+package com.blog.backasync;
+
+import com.joanzapata.android.asyncservice.api.Message;
+import com.joanzapata.android.asyncservice.api.internal.AsyncService;
+import com.joanzapata.android.asyncservice.api.internal.Injector;
+import java.util.HashSet;
+import java.util.Set;
+import android.os.Handler;
+import android.os.Looper;
+import com.joanzapata.android.asyncservice.api.annotation.OnMessage.Priority;
+import static com.joanzapata.android.asyncservice.api.annotation.OnMessage.Priority.*;
+
+public final class MainActivityInjector extends Injector<MainActivity> {
+
+  private final Handler __handler = new Handler(Looper.getMainLooper());
+
+  private final Set<String> __receivedFinalResponses = new HashSet<String>();
+
+  @Override
+  protected void inject(MainActivity target) {
+    target.service = new com.blog.backasync.DemoServiceImpl(target);
+  }
+
+  @Override
+  protected void dispatch(final MainActivity target, final Message event, Priority priority) {
+    final boolean __hasBeenReceivedAlready = event.getQuery() != null && __receivedFinalResponses.contains(event.getQuery());
+    if (event.isCached() && __hasBeenReceivedAlready) return;
+    if (!__hasBeenReceivedAlready && !event.isCached() && priority == LAST) __receivedFinalResponses.add(event.getQuery());
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.HuiEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onHuiFetched((com.blog.backasync.HuiEvent) event.getPayload());
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.UserEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetched((com.blog.backasync.UserEvent) event.getPayload());
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.User) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetched2((com.blog.backasync.User) event.getPayload());
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.User) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetched((com.blog.backasync.User) event.getPayload());
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.LoadingEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onLoading((com.blog.backasync.LoadingEvent) event.getPayload());
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.UserEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetched();
+                }
+              }
+              );
+        }
+        else if (event.getPayload() instanceof com.blog.backasync.UserEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetched();
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getEmitter() == getTarget()) {
+        if (event.getPayload() instanceof com.blog.backasync.UserEvent) {
+          __handler.post(new Runnable() {
+                @Override
+                public void run() {
+                  target.onUserFetchedTest();
+                }
+              }
+              );
+        }
+      }
+    }
+    if (priority == FIRST) {
+      if (event.getPayload() instanceof com.blog.backasync.UserEvent) {
+        __handler.post(new Runnable() {
+              @Override
+              public void run() {
+                target.onUserFetchedFromAnywhere((com.blog.backasync.UserEvent) event.getPayload());
+              }
+            }
+            );
+      }
+    }
+  }
+
+}
